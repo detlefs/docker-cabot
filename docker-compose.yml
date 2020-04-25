@@ -7,11 +7,11 @@ services:
       service: base
     command: sh -c "cabot migrate && gunicorn cabot.wsgi:application -b 0.0.0.0:5000 --workers=5"
     ports:
-      - '127.0.0.1:5000:5000'
+      - 5000:5000
     depends_on:
       - postgres
       - rabbitmq
-    restart: always
+    restart: unless-stopped
 
   worker:
     extends:
@@ -22,7 +22,7 @@ services:
       - web
       - postgres
       - rabbitmq
-    restart: always
+    restart: unless-stopped
 
   beat:
     extends:
@@ -33,7 +33,7 @@ services:
       - web
       - postgres
       - rabbitmq
-    restart: always
+    restart: unless-stopped
 
   postgres:
     image: postgres:9.6-alpine
@@ -41,11 +41,11 @@ services:
       - data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres_password
-    restart: always
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3.6-alpine
-    restart: always
+    restart: unless-stopped
 
 volumes:
   data:

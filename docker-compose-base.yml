@@ -6,4 +6,4 @@ services:
     env_file:
       - conf/default.env
       - conf/${CABOT_ENVIRONMENT}.env
-    restart: always
+    restart: unless-stopped
